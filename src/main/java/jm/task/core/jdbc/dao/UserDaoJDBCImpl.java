@@ -22,11 +22,9 @@ public class UserDaoJDBCImpl extends Util implements UserDao {
                 AGE BIGINT NOT NULL,
                 CONSTRAINT USER_PKEY PRIMARY KEY (ID)
                 )""";
-        try (Connection connection = getConnection()) {
-            Statement statement = connection.createStatement();
+        try (Connection connection = getConnection(); Statement statement = connection.createStatement()) {
             statement.executeUpdate("USE test_db;");
             statement.executeUpdate(sql);
-            statement.close();
         } catch (SQLSyntaxErrorException e) {
             System.out.println(e.getMessage());
         } catch (NullPointerException | SQLException e) {
@@ -36,10 +34,8 @@ public class UserDaoJDBCImpl extends Util implements UserDao {
 
     public void dropUsersTable() throws SQLException {
         String sql = "DROP TABLE `test_db`.`users`";
-        try (Connection connection = getConnection()) {
-            Statement statement = connection.createStatement();
+        try (Connection connection = getConnection(); Statement statement = connection.createStatement()) {
             statement.executeUpdate(sql);
-            statement.close();
         } catch (SQLSyntaxErrorException e) {
             System.out.println(e.getMessage());
         } catch (NullPointerException | SQLException e) {
@@ -75,8 +71,7 @@ public class UserDaoJDBCImpl extends Util implements UserDao {
     public List<User> getAllUsers() throws SQLException {
         String sql = "SELECT * FROM test_db.users";
         List<User> users = new ArrayList<>();
-        try (Connection connection = getConnection()) {
-            Statement statement = connection.createStatement();
+        try (Connection connection = getConnection(); Statement statement = connection.createStatement()) {
             ResultSet resultSet = statement.executeQuery(sql);
             while (resultSet.next()) {
                 User user = new User();
@@ -86,7 +81,6 @@ public class UserDaoJDBCImpl extends Util implements UserDao {
                 user.setAge(resultSet.getByte("AGE"));
                 users.add(user);
             }
-            statement.close();
         } catch (NullPointerException | SQLException e) {
             e.printStackTrace();
         }
@@ -95,11 +89,9 @@ public class UserDaoJDBCImpl extends Util implements UserDao {
 
     public void cleanUsersTable() throws SQLException {
         String sql = "TRUNCATE TABLE users";
-        try (Connection connection = getConnection()) {
-            Statement statement = connection.createStatement();
+        try (Connection connection = getConnection(); Statement statement = connection.createStatement()) {
             statement.executeUpdate("USE test_db;");
             statement.executeUpdate(sql);
-            statement.close();
         }
     }
 }
