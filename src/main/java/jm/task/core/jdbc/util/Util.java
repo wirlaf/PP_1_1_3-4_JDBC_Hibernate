@@ -1,6 +1,8 @@
 package jm.task.core.jdbc.util;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 
 public class Util {
 
@@ -9,7 +11,7 @@ public class Util {
     private static final String DB_USER = "test_user";
     private static final String DB_PASSWORD = "test_user";
 
-    public Connection getConnection() {
+    public static Connection getConnection() {
         Connection connection = null;
         try {
             Class.forName(DB_DRIVER);

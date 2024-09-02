@@ -1,18 +1,21 @@
 package jm.task.core.jdbc.dao;
 
-import jm.task.core.jdbc.model.User;
-import jm.task.core.jdbc.util.Util;
-
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserDaoJDBCImpl extends Util implements UserDao {
+import jm.task.core.jdbc.model.User;
+
+import static jm.task.core.jdbc.util.Util.getConnection;
+
+public class UserDaoJDBCImpl implements UserDao {
+
+    static Connection connection = getConnection();
 
     public UserDaoJDBCImpl() {
     }
 
-    public void createUsersTable() throws SQLException {
+    public void createUsersTable() {
         String sql = """
                 create table USERS
                 (
@@ -22,7 +25,7 @@ public class UserDaoJDBCImpl extends Util implements UserDao {
                 AGE BIGINT NOT NULL,
                 CONSTRAINT USER_PKEY PRIMARY KEY (ID)
                 )""";
-        try (Connection connection = getConnection(); Statement statement = connection.createStatement()) {
+        try (Statement statement = connection.createStatement()) {
             statement.executeUpdate("USE test_db;");
             statement.executeUpdate(sql);
         } catch (SQLSyntaxErrorException e) {
@@ -32,9 +35,9 @@ public class UserDaoJDBCImpl extends Util implements UserDao {
         }
     }
 
-    public void dropUsersTable() throws SQLException {
+    public void dropUsersTable() {
         String sql = "DROP TABLE `test_db`.`users`";
-        try (Connection connection = getConnection(); Statement statement = connection.createStatement()) {
+        try (Statement statement = connection.createStatement()) {
             statement.executeUpdate(sql);
         } catch (SQLSyntaxErrorException e) {
             System.out.println(e.getMessage());
@@ -43,23 +46,22 @@ public class UserDaoJDBCImpl extends Util implements UserDao {
         }
     }
 
-    public void saveUser(String name, String lastName, byte age) throws SQLException {
+    public void saveUser(String name, String lastName, byte age) {
         String sql = "INSERT INTO users (name, lastName, age) VALUES (?, ?, ?)";
-        try (Connection connection = getConnection(); PreparedStatement ps = connection.prepareStatement(sql)) {
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setString(1, name);
             ps.setString(2, lastName);
             ps.setByte(3, age);
             ps.execute("USE test_db;");
             ps.executeUpdate();
-            System.out.println("User с именем " + name + " добавлен в базу данных");
         } catch (NullPointerException | SQLException e) {
             e.printStackTrace();
         }
     }
 
-    public void removeUserById(long id) throws SQLException {
+    public void removeUserById(long id) {
         String sql = "DELETE FROM users WHERE id = ?";
-        try (Connection connection = getConnection(); PreparedStatement ps = connection.prepareStatement(sql)) {
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setLong(1, id);
             ps.execute("USE test_db;");
             ps.executeUpdate();
@@ -68,10 +70,10 @@ public class UserDaoJDBCImpl extends Util implements UserDao {
         }
     }
 
-    public List<User> getAllUsers() throws SQLException {
+    public List<User> getAllUsers() {
         String sql = "SELECT * FROM test_db.users";
         List<User> users = new ArrayList<>();
-        try (Connection connection = getConnection(); Statement statement = connection.createStatement()) {
+        try (Statement statement = connection.createStatement()) {
             ResultSet resultSet = statement.executeQuery(sql);
             while (resultSet.next()) {
                 User user = new User();
@@ -87,11 +89,13 @@ public class UserDaoJDBCImpl extends Util implements UserDao {
         return users;
     }
 
-    public void cleanUsersTable() throws SQLException {
+    public void cleanUsersTable() {
         String sql = "TRUNCATE TABLE users";
-        try (Connection connection = getConnection(); Statement statement = connection.createStatement()) {
+        try (Statement statement = connection.createStatement()) {
             statement.executeUpdate("USE test_db;");
             statement.executeUpdate(sql);
+        } catch (NullPointerException | SQLException e) {
+            e.printStackTrace();
         }
     }
 }
