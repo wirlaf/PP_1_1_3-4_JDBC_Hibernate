@@ -26,7 +26,6 @@ public class UserDaoJDBCImpl implements UserDao {
                 CONSTRAINT USER_PKEY PRIMARY KEY (ID)
                 )""";
         try (Statement statement = connection.createStatement()) {
-            statement.executeUpdate("USE test_db;");
             statement.executeUpdate(sql);
         } catch (SQLSyntaxErrorException e) {
             System.out.println(e.getMessage());
@@ -36,7 +35,7 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     public void dropUsersTable() {
-        String sql = "DROP TABLE `test_db`.`users`";
+        String sql = "DROP TABLE users";
         try (Statement statement = connection.createStatement()) {
             statement.executeUpdate(sql);
         } catch (SQLSyntaxErrorException e) {
@@ -52,7 +51,6 @@ public class UserDaoJDBCImpl implements UserDao {
             ps.setString(1, name);
             ps.setString(2, lastName);
             ps.setByte(3, age);
-            ps.execute("USE test_db;");
             ps.executeUpdate();
         } catch (NullPointerException | SQLException e) {
             e.printStackTrace();
@@ -63,7 +61,6 @@ public class UserDaoJDBCImpl implements UserDao {
         String sql = "DELETE FROM users WHERE id = ?";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setLong(1, id);
-            ps.execute("USE test_db;");
             ps.executeUpdate();
         } catch (NullPointerException | SQLException e) {
             e.printStackTrace();
@@ -71,7 +68,7 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     public List<User> getAllUsers() {
-        String sql = "SELECT * FROM test_db.users";
+        String sql = "SELECT * FROM users";
         List<User> users = new ArrayList<>();
         try (Statement statement = connection.createStatement()) {
             ResultSet resultSet = statement.executeQuery(sql);
@@ -92,7 +89,6 @@ public class UserDaoJDBCImpl implements UserDao {
     public void cleanUsersTable() {
         String sql = "TRUNCATE TABLE users";
         try (Statement statement = connection.createStatement()) {
-            statement.executeUpdate("USE test_db;");
             statement.executeUpdate(sql);
         } catch (NullPointerException | SQLException e) {
             e.printStackTrace();
