@@ -17,7 +17,7 @@ public class UserDaoJDBCImpl implements UserDao {
 
     public void createUsersTable() {
         String sql = """
-                create table USERS
+                CREATE TABLE IF NOT EXISTS USERS
                 (
                 ID bigint not null auto_increment,
                 NAME varchar(255) NOT NULL,
@@ -27,19 +27,15 @@ public class UserDaoJDBCImpl implements UserDao {
                 )""";
         try (Statement statement = connection.createStatement()) {
             statement.executeUpdate(sql);
-        } catch (SQLSyntaxErrorException e) {
-            System.out.println(e.getMessage());
         } catch (NullPointerException | SQLException e) {
             e.printStackTrace();
         }
     }
 
     public void dropUsersTable() {
-        String sql = "DROP TABLE users";
+        String sql = "DROP TABLE IF EXISTS USERS";
         try (Statement statement = connection.createStatement()) {
             statement.executeUpdate(sql);
-        } catch (SQLSyntaxErrorException e) {
-            System.out.println(e.getMessage());
         } catch (NullPointerException | SQLException e) {
             e.printStackTrace();
         }
