@@ -1,8 +1,15 @@
 package jm.task.core.jdbc.util;
 
+import jm.task.core.jdbc.model.User;
+import org.hibernate.HibernateException;
+import org.hibernate.SessionFactory;
+import org.hibernate.Session;
+import org.hibernate.cfg.Configuration;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Properties;
 
 public class Util {
 
@@ -20,5 +27,30 @@ public class Util {
             e.printStackTrace();
         }
         return connection;
+    }
+
+    private static final SessionFactory factory;
+
+    static {
+        try {
+            Properties prop = new Properties();
+            prop.setProperty("hibernate.connection.url", "jdbc:mysql://localhost:3306/test_db");
+            prop.setProperty("hibernate.connection.username", "test_user");
+            prop.setProperty("hibernate.connection.password", "test_user");
+            prop.setProperty("dialect", "org.hibernate.dialect.MySQLDialect");
+
+            prop.setProperty("hibernate.hbm2ddl.auto", "create");
+
+            factory = new Configuration()
+                    .addProperties(prop)
+                    .addAnnotatedClass(User.class)
+                    .buildSessionFactory();
+        } catch (Exception e) {
+            throw new ExceptionInInitializerError(e);
+        }
+    }
+
+    public static Session getSession() throws HibernateException {
+        return factory.openSession();
     }
 }

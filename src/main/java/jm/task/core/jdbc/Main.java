@@ -4,11 +4,10 @@ import jm.task.core.jdbc.model.User;
 import jm.task.core.jdbc.service.UserService;
 import jm.task.core.jdbc.service.UserServiceImpl;
 
-import java.sql.SQLException;
 import java.util.List;
 
 public class Main {
-    public static void main(String[] args) throws SQLException {
+    public static void main(String[] args) {
 
         UserService userService = new UserServiceImpl();
         userService.createUsersTable();
@@ -16,6 +15,7 @@ public class Main {
         userService.saveUser("Petr", "Ivanov", (byte) 24);
         userService.saveUser("Oleg", "Smirnov", (byte) 22);
         userService.saveUser("Andrey", "Sidorov", (byte) 20);
+        userService.removeUserById(2L);
         List<User> users = userService.getAllUsers();
         System.out.println(users);
         userService.cleanUsersTable();
