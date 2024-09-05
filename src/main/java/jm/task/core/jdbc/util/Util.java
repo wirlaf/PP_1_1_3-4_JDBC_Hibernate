@@ -1,9 +1,7 @@
 package jm.task.core.jdbc.util;
 
 import jm.task.core.jdbc.model.User;
-import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
-import org.hibernate.Session;
 import org.hibernate.cfg.Configuration;
 
 import java.sql.Connection;
@@ -39,7 +37,7 @@ public class Util {
             prop.setProperty("hibernate.connection.password", "test_user");
             prop.setProperty("dialect", "org.hibernate.dialect.MySQLDialect");
 
-            prop.setProperty("hibernate.hbm2ddl.auto", "create");
+//            prop.setProperty("hibernate.hbm2ddl.auto", "create");
 
             factory = new Configuration()
                     .addProperties(prop)
@@ -50,7 +48,7 @@ public class Util {
         }
     }
 
-    public static Session getSession() throws HibernateException {
-        return factory.openSession();
+    public static SessionFactory getSession() {
+        return factory;
     }
 }
