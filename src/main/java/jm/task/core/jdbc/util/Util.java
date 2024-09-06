@@ -32,9 +32,9 @@ public class Util {
     static {
         try {
             Properties prop = new Properties();
-            prop.setProperty("hibernate.connection.url", "jdbc:mysql://localhost:3306/test_db");
-            prop.setProperty("hibernate.connection.username", "test_user");
-            prop.setProperty("hibernate.connection.password", "test_user");
+            prop.setProperty("hibernate.connection.url", DB_URL);
+            prop.setProperty("hibernate.connection.username", DB_USER);
+            prop.setProperty("hibernate.connection.password", DB_PASSWORD);
             prop.setProperty("dialect", "org.hibernate.dialect.MySQLDialect");
 
 //            prop.setProperty("hibernate.hbm2ddl.auto", "create");
@@ -48,7 +48,7 @@ public class Util {
         }
     }
 
-    public static SessionFactory getSession() {
+    public static SessionFactory getSessionFactory() {
         return factory;
     }
 }

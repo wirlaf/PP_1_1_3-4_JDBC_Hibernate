@@ -12,7 +12,7 @@ import static org.hibernate.resource.transaction.spi.TransactionStatus.ACTIVE;
 import static org.hibernate.resource.transaction.spi.TransactionStatus.MARKED_ROLLBACK;
 
 public class UserDaoHibernateImpl implements UserDao {
-    static SessionFactory factory = Util.getSession();
+    static SessionFactory factory = Util.getSessionFactory();
 
     public UserDaoHibernateImpl() {
     }
